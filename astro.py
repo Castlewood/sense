@@ -5,6 +5,7 @@ import time
 import csv
 
 lastread = datetime.datetime.now()
+sampling_interval= 1
 
 def read_data():
     sense = SenseHat()
@@ -13,16 +14,21 @@ def read_data():
     o = sense.get_orientation()
     return o
 
-while True:
-    timestamp=datetime.datetime.now()
-    
-    if (timestamp-lastread).total_seconds() > 10:        
-        data=read_data()
-        print(data)
+with open( "pitch_data.csv" , "a" ) as data_file:
+    writer=csv.writer(data_file,delimiter=',',quotechar=' ',quoting=csv.QUOTE_MINIMAL)
+    writer.writerow(['pitch','roll','yaw','timestamp'])
 
-        with open( "pitch_data.csv" , "a" ) as f:
-            writer=csv.writer(f,delimiter=',',quotechar=' ',quoting=csv.QUOTE_MINIMAL)
+    while True:
+        timestamp=datetime.datetime.now()
+    
+        if (timestamp-lastread).total_seconds() > sampling_interval:        
+            data=read_data()        
             writer.writerow([str(data['pitch']),str(data['roll']),str(data['yaw']), str(timestamp)])
+            data_file.flush()
+            print(data)
+
+        
+            
             
 
     
