@@ -11,19 +11,23 @@ def read_data():
     sense = SenseHat()
     global lastread
     lastread=datetime.datetime.now()
-    o = sense.get_orientation()
-    return o
+    orientation = sense.get_orientation()
+    compass_raw = sense.get_compass_raw()
+    data={'Orientation':orientation, 'Compass_Raw':compass_raw}
+    return data
 
 with open( "pitch_data.csv" , "a" ) as data_file:
     writer=csv.writer(data_file,delimiter=',',quotechar=' ',quoting=csv.QUOTE_MINIMAL)
-    writer.writerow(['pitch','roll','yaw','timestamp'])
+    writer.writerow(['pitch','roll','yaw','mag_x','mag_y','mag_z','timestamp'])
 
     while True:
         timestamp=datetime.datetime.now()
     
         if (timestamp-lastread).total_seconds() > sampling_interval:        
-            data=read_data()        
-            writer.writerow([str(data['pitch']),str(data['roll']),str(data['yaw']), str(timestamp)])
+            data=read_data()
+            orientation=data['Orientation']
+            compass_raw=data['Compass_Raw']
+            writer.writerow([str(orientation['pitch']),str(orientation['roll']),str(orientation['yaw']), str(compass_raw['x']),str(compass_raw['y']),str(compass_raw['x']), str(timestamp)])
             data_file.flush()
             print(data)
 
