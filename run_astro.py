@@ -12,8 +12,7 @@ import astro_cabin_alt
 #main program
 #coded by Caitlin, Cerys, Harrison, Holly, James and Liam
 
-astro_display.drawScreen()
-astro_display.incrementOrbitPos()
+astro_display.setup()
 astro_display.updateDisplay()
 astro_logging.setup()
 astro_logging.log()

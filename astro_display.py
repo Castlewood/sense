@@ -39,7 +39,7 @@ sense = SenseHat()
 
 #functions
 
-def drawScreen():
+def setup():
   
   image = [
    o, o, w, w, w, w, o, o,
@@ -53,6 +53,9 @@ def drawScreen():
   ]
   sense.set_pixels(image)
   sense.rotation = 180
+  incrementOrbitPos()
+
+  
 
 def flashPixel():
   global flash
@@ -135,9 +138,10 @@ def moveISS():
     sense.set_pixel(0, 4, r)
     
 def updateDisplay():
+ 
   flashPixel()
   moveISS()
-  #threading.Timer(0.9, updateDisplay).start()
+
 
 def incrementOrbitPos():
   global orbitPos
